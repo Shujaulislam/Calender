@@ -34,6 +34,23 @@ Before you begin, ensure you have met the following requirements:
    ```
    npm install
    ```
+### OR
+
+1. download the repository: 
+   zip file and extract it.
+
+2.  right click and open terminal in the folder and run this command:
+   ```
+   code .
+   ```
+2. Navigate to the project directory:
+   cd react-calendar-app
+   ```
+
+3. Install the dependencies:
+   ```
+   npm install
+   ```   ```
 
 ## Running the Application
 
