@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MiniCalendar from "./MiniCalendar"; // You'll need to create this component
+import MiniCalendar from "./MiniCalendar"; 
 import { useTheme } from '../context/ThemeContext';
 
 function TopBar({ currentDate, onDateChange, onPrevMonth, onNextMonth }) {
@@ -20,22 +20,27 @@ function TopBar({ currentDate, onDateChange, onPrevMonth, onNextMonth }) {
     "December",
   ];
 
+  // Handle click on "Today" button
   const handleToday = () => {
     onDateChange(new Date());
   };
 
+  // Toggle mini calendar visibility
   const toggleMiniCalendar = () => {
     setShowMiniCalendar(!showMiniCalendar);
   };
 
   return (
     <div className={`flex justify-between items-center p-2 border-b w-full fixed left-0 top-0 z-30 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+      {/* Display current month and year */}
       <h2 
         className={`text-2xl font-light cursor-pointer ${isDarkMode ? 'text-white' : 'text-blue-600'}`}
         onClick={toggleMiniCalendar}
       >
         {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
       </h2>
+      
+      {/* Render MiniCalendar when showMiniCalendar is true */}
       {showMiniCalendar && (
         <MiniCalendar
           currentDate={currentDate}
@@ -45,6 +50,8 @@ function TopBar({ currentDate, onDateChange, onPrevMonth, onNextMonth }) {
           onClose={() => setShowMiniCalendar(false)}
         />
       )}
+      
+      {/* Navigation buttons */}
       <div>
         <button
           onClick={onPrevMonth}

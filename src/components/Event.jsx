@@ -2,13 +2,17 @@ import React from 'react';
 import { useTheme } from '../context/ThemeContext';
 
 function Event({ event, onDelete, onResize, onDragStart, cellWidth, cellHeight }) {
+  // Get the current theme mode
   const { isDarkMode } = useTheme();
+
+  // Helper function to format time string
   const formatTime = (timeString) => {
     if (!timeString) return '';
     const date = new Date(timeString);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
   };
 
+  // Determine the text color based on the event's background color
   const textColor = getContrastColor(event.color);
 
   return (
@@ -36,9 +40,10 @@ function Event({ event, onDelete, onResize, onDragStart, cellWidth, cellHeight }
         Delete
       </button>
     </div>
-    );
+  );
 }
 
+// Helper function to determine contrast color for text
 const getContrastColor = (backgroundColor) => {
   if (!backgroundColor) return 'black';
   const rgb = backgroundColor.match(/\d+/g);

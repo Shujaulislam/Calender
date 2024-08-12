@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+
 *{
-    user-select: none;
+    user-select: none;  /* to make sure user isn't text selecting the events content 
+    which will hinder the delete button and may result in unwanted hindrence */    
 }

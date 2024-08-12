@@ -5,6 +5,7 @@ import { generatePastelColor, generatePastelColorForResource } from '../utils/co
 import { useTheme } from '../context/ThemeContext';
 
 function Calendar({ currentDate, events, onEventChange }) {
+  // State for managing the add event form
   const [showAddEventForm, setShowAddEventForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedResource, setSelectedResource] = useState(null);
@@ -12,6 +13,7 @@ function Calendar({ currentDate, events, onEventChange }) {
   const calendarRef = useRef(null);
   const { isDarkMode } = useTheme();
 
+  // Initialize resources with pastel colors
   const [resources, setResources] = useState([
     { id: 1, name: 'Resource A', color: generatePastelColorForResource(0) },
     { id: 2, name: 'Resource B', color: generatePastelColorForResource(1) },
@@ -30,12 +32,14 @@ function Calendar({ currentDate, events, onEventChange }) {
     { id: 15, name: 'Resource O', color: generatePastelColorForResource(14) },
   ]);
 
+  // Function to get the next available resource letter
   const getNextResourceLetter = () => {
     const lastResource = resources[resources.length - 1];
     const lastLetter = lastResource.name.split(' ')[1];
     return String.fromCharCode(lastLetter.charCodeAt(0) + 1);
   };
 
+  // Function to add a new resource
   const addResource = () => {
     const newId = resources.length + 1;
     const newLetter = getNextResourceLetter();
@@ -49,24 +53,28 @@ function Calendar({ currentDate, events, onEventChange }) {
     ]);
   };
 
+  // Function to remove a resource (only for custom added resources)
   const removeResource = (id) => {
     if (id > 15) {
       setResources(resources.filter(resource => resource.id !== id));
     }
   };
 
+  // Calculate the number of days in the current month
   const daysInMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
     0
   ).getDate();
 
+  // Handle cell click to open add event form
   const handleCellClick = (day, resource) => {
     setSelectedDate(day);
     setSelectedResource(resource);
     setShowAddEventForm(true);
   };
 
+  // Handle adding a new event
   const handleAddEvent = (newEvent) => {
     const dateKey = formatDateKey(selectedDate, selectedResource);
     const updatedEvents = { ...events };
@@ -79,12 +87,13 @@ function Calendar({ currentDate, events, onEventChange }) {
       date: selectedDate,
       resource: selectedResource,
       duration: 1,
-      color: generatePastelColor(), // Use pastel color generator
+      color: generatePastelColor(), // Generate a pastel color for the new event
     });
     onEventChange(updatedEvents);
     setShowAddEventForm(false);
   };
 
+  // Handle deleting an event
   const handleDeleteEvent = (dateKey, event) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
       const newEvents = { ...events };
@@ -94,6 +103,7 @@ function Calendar({ currentDate, events, onEventChange }) {
     }
   };
 
+  // Handle resizing an event
   const handleEventResize = (event, newDuration) => {
     const dateKey = formatDateKey(event.date, event.resource);
     const updatedEvents = { ...events };
@@ -102,14 +112,17 @@ function Calendar({ currentDate, events, onEventChange }) {
     onEventChange(updatedEvents);
   };
 
+  // Handle start of drag operation
   const handleDragStart = (event, dateKey) => {
     setDraggedEvent({ event, originalDateKey: dateKey });
   };
 
+  // Handle drag over operation
   const handleDragOver = (e) => {
     e.preventDefault();
   };
 
+  // Handle drop operation for drag and drop
   const handleDrop = (e, targetDate, targetResource) => {
     e.preventDefault();
     if (!draggedEvent) return;
@@ -140,7 +153,7 @@ function Calendar({ currentDate, events, onEventChange }) {
     setDraggedEvent(null);
   };
 
-
+  // Helper function to format date key
   const formatDateKey = (date, resource) => {
     return `${date.getFullYear()}-${(date.getMonth() + 1)
       .toString()
@@ -150,6 +163,7 @@ function Calendar({ currentDate, events, onEventChange }) {
         .padStart(2, "0")}-${resource}`;
   };
 
+  // Render the header of the calendar
   const renderHeader = () => {
     const days = [];
     for (let i = 1; i <= daysInMonth; i++) {
@@ -180,6 +194,7 @@ function Calendar({ currentDate, events, onEventChange }) {
     return days;
   };
 
+  // Render the main calendar grid
   const renderCalendar = () => {
     const cells = [];
     resources.forEach((resource, resourceIndex) => {
@@ -217,8 +232,6 @@ function Calendar({ currentDate, events, onEventChange }) {
                     onDelete={() => handleDeleteEvent(dateKey, event)}
                     onResize={handleEventResize}
                     onDragStart={() => handleDragStart(event, dateKey)}
-                  // cellWidth={75}
-                  // cellHeight={50}
                   />
                 ))}
             </div>
@@ -274,7 +287,6 @@ function Calendar({ currentDate, events, onEventChange }) {
           initialResource={selectedResource}
         />
       )}
-
     </div>
   );
 }
